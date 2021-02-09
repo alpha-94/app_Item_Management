@@ -6,19 +6,54 @@ import com.arslooper.item_app.R
 import kotlinx.android.synthetic.main.entry_activity_select.*
 import kotlinx.android.synthetic.main.item_activity_search.*
 
+import com.google.gson.GsonBuilder
+import okhttp3.*
+import java.io.IOException
+import java.net.URL
+
+
 class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_activity_search)
 
-        val list: MutableList<Item> = mutableListOf()
+        println("fetchJson start")
+        fetchJson()
+
+    }
+
+    private fun fetchJson(){
+        println("fetchJson start in")
+        val url = URL("http://127.0.0.1/dashboard/query.php/")
+        val request = Request.Builder().url(url).build()
+        val client = OkHttpClient()
+
+        client.newCall(request).enqueue(object: Callback{
+            override fun onResponse(call: Call, response: Response) {
+                println("onResponse start")
+                val body = response.body?.string()
+                val gson = GsonBuilder().create()
+                val list = gson.fromJson(body, JsonObj::class.java)
+
+                runOnUiThread {
+                    println("runOnUiThread start")
+                    item_search_RecyclerView.adapter  = SearchAdepter(list)
+                }
+            }
+            override fun onFailure(call: Call, e: IOException) {
+                println("fail :: $e")
+            }
+        })
+
+
+    }
+}
+
+/*
+*
+*  val list: MutableList<Item> = mutableListOf()
         list.add(Item("hi", "hi1"))
         list.add(Item("hi", "hi2"))
         list.add(Item("hi", "hi3"))
         list.add(Item("hi", "hi4"))
-
-        val adapter = SearchAdepter(list)
-        item_search_RecyclerView.adapter = adapter
-
-    }
-}
+* */
