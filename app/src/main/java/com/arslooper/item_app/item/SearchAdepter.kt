@@ -32,10 +32,10 @@ class SearchAdepter(var mylist: JsonObj): RecyclerView.Adapter<SearchAdepter.Vie
         private var view: View = v
 
         fun bind(listener: View.OnClickListener, item: Item){
-            view.item_text1.text = item.i1
-            view.item_text2.text = item.i2
-            view.item_text3.text = item.i3
-            view.item_text4.text = item.i4
+            view.item_text1.text = item.id
+            view.item_text2.text = item.item_code
+            view.item_text3.text = item.item_date
+            view.item_text4.text = item.item_name
             view.setOnClickListener(listener)
         }
     }

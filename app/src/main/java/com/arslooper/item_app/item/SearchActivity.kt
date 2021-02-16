@@ -3,7 +3,6 @@ package com.arslooper.item_app.item
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.arslooper.item_app.R
-import kotlinx.android.synthetic.main.entry_activity_select.*
 import kotlinx.android.synthetic.main.item_activity_search.*
 
 import com.google.gson.GsonBuilder
@@ -21,10 +20,10 @@ class SearchActivity : AppCompatActivity() {
         fetchJson()
 
     }
-
+    
     private fun fetchJson(){
         println("fetchJson start in")
-        val url = URL("http://127.0.0.1/dashboard/query.php/")
+        val url = URL("http://10.0.2.2/dashboard/query.php/")
         val request = Request.Builder().url(url).build()
         val client = OkHttpClient()
 
@@ -32,6 +31,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 println("onResponse start")
                 val body = response.body?.string()
+
                 val gson = GsonBuilder().create()
                 val list = gson.fromJson(body, JsonObj::class.java)
 
@@ -44,16 +44,5 @@ class SearchActivity : AppCompatActivity() {
                 println("fail :: $e")
             }
         })
-
-
     }
 }
-
-/*
-*
-*  val list: MutableList<Item> = mutableListOf()
-        list.add(Item("hi", "hi1"))
-        list.add(Item("hi", "hi2"))
-        list.add(Item("hi", "hi3"))
-        list.add(Item("hi", "hi4"))
-* */
